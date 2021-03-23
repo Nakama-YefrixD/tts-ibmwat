@@ -20,7 +20,17 @@ function consultaIbm($qr){
 }
 
 // LLamada a la api de consultas
-$wDir="/var/lib/asterisk/sounds/en/gravaciones/citas/tts/";
+$direccionAudiosTts="/var/lib/asterisk/sounds/en/gravaciones/citas/tts/";
+
+$audioSiete         = "/var/lib/asterisk/sounds/en/gravaciones/audios/Audio7rutconhoramp3_xc";
+$audioSieteDosUno   = "/var/lib/asterisk/sounds/en/gravaciones/audios/Audio721mp3_xc";
+$audioSieteUno      = "/var/lib/asterisk/sounds/en/gravaciones/audios/Audio71conDRmp3_xc";
+$audioTres          = "/var/lib/asterisk/sounds/en/gravaciones/audios/Audio3num1mp3_xc";
+$audioSieteTres     = "/var/lib/asterisk/sounds/en/gravaciones/audios/Audio73esperaenlineamp3_xc";
+$audioSeis          = "/var/lib/asterisk/sounds/en/gravaciones/audios/Audio6rutsinhoramp3_xc";
+$audioSieteDos      = "/var/lib/asterisk/sounds/en/gravaciones/audios/Audio72confirmacionreservamp3_xc";
+
+
 if (isset($argv[1])){
     $head = array();
     $head[] = 'Content-type: application/json';
@@ -48,24 +58,35 @@ if (isset($argv[1])){
         $paciente = $newData['datos']['paciente'];
         $correo_paciente = $newData['datos']['correo_paciente'];
         $mesage = 'medico, '.$medico. ', especialidad, '.$especialidad.', paciente, '.$paciente.', correo del paciente, '.$correo_paciente;
+
+
+        // $agi->stream_file($audioSiete);
+        // $agi->stream_file($audioSieteDosUno);
+        // $agi->stream_file($audioSieteUno);
+        // $agi->stream_file($audioTres);
+        // $agi->stream_file($audioSieteTres);
+        // $agi->stream_file($audioSeis);
+        // $agi->stream_file($audioSieteDos);
+
+
         $encodeMesage = urlencode($mesage);
         
         $result = consultaIbm($encodeMesage);
         echo("listo");
-        $wr = fopen($wDir.'audio.ulaw',"w");
+        $wr = fopen($direccionAudiosTts.'audio.ulaw',"w");
         fwrite($wr, $result);
         play_date($fecha,$hora,$agi);
         $agi->answer();
-        $agi->stream_file($wDir."audio");
+        $agi->stream_file($direccionAudiosTts."audio");
     }else{
         echo $newData['mensaje'];
         $message = $newData['mensaje'];
         $encodeMesage = urlencode($message);
         $result = consultaIbm($encodeMesage);
-        $wr = fopen($wDir.'audio.ulaw',"w");
+        $wr = fopen($direccionAudiosTts.'audio.ulaw',"w");
         fwrite($wr, $result);
         $agi->answer();
-        $agi->stream_file($wDir."audio");
+        $agi->stream_file($direccionAudiosTts."audio");
 
     }
 }else{
@@ -73,10 +94,10 @@ if (isset($argv[1])){
     $message = "Ingrese rut";
     $encodeMesage = urlencode($message);
     $result = consultaIbm($encodeMesage);
-    $wr = fopen($wDir.'audio.ulaw',"w");
+    $wr = fopen($direccionAudiosTts.'audio.ulaw',"w");
     fwrite($wr, $result);
     $agi->answer();
-    $agi->stream_file($wDir."audio");
+    $agi->stream_file($direccionAudiosTts."audio");
 }
 
 
